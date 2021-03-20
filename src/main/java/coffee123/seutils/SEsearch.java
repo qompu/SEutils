@@ -41,13 +41,6 @@ public class SEsearch {
     //directory contains the lucene indexes
     private static final String INDEX_DIR = "c:/temp/indexedFiles";
     
-            //Input folder C:\\example\\dir
-    private static final String docsPath = "c:/temp/readFiles";
-         
-        //Output folder
-    private static final String indexPath = "c:/temp/write2indexedFiles";
- 
-
     public static void main(String[] args) throws Exception 
     {
         //Create lucene searcher. It search over a single IndexReader.
@@ -55,7 +48,7 @@ public class SEsearch {
          
         //Search indexed contents using search term
         //  TopDocs foundDocs = searchInContent("agreeable", searcher); // test
-        TopDocs foundDocs = searchInContent("voluptate", searcher);  // test
+        TopDocs foundDocs = searchInContent("lorem", searcher);  // test
            
         //Total found documents
         System.out.println("Total Results :: " + foundDocs.totalHits);
