@@ -4,7 +4,8 @@
  * Lucene - Index and Search Text Files - HowToDoInJava.com
  * https://howtodoinjava.com/lucene/lucene-index-and-search-text-files/
  * Additional debugging and troubleshooting of the deleteEntriesFromIndexUsingTerm() 
- * method using the Luke utility (http://www.getopt.org/luke/) is required.
+ * method using the Luke utility hosted by Google
+ * (https://code.google.com/archive/p/luke/) is required.
  */
 
 
