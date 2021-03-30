@@ -1,4 +1,5 @@
 /*
+ * SEARCH ENGINE MAIN FUNCTIONS
  * Lucene main search and index functions. Updated for Lucene 8.8.1
  * Adapted from original source code: 
  * Lucene - Index and Search Text Files - HowToDoInJava.com
@@ -11,6 +12,7 @@
  *
  * Lucene docs: https://lucene.apache.org/core/8_0_0/core/index.html?overview-summary.html
  * "Apache Lucene is a high-performance, full-featured text search engine library."
+ * Lucene features  a nonSQL database which can be accessed and modified with java utilities.
  */
 
 
@@ -55,15 +57,17 @@ import org.apache.lucene.store.FSDirectory;
 
 public class MainFunctions {
     
+    // Directory that contains the Lucene index
     private static final String INDEX_DIR = "c:/temp/indexedFiles";
     
+    // Directory that contains the text files to be indexed
     private static final String DOC_DIR = "c:/temp/readFiles";
 
        protected static void indexDoc(IndexWriter writer, Path file, long lastModified) throws IOException 
     {
         try (InputStream stream = Files.newInputStream(file)) 
         {
-            //Create lucene Document
+            // Create lucene Document
             Document doc = new Document();
              
             doc.add(new StringField("path", file.toString(), Field.Store.YES));
@@ -81,7 +85,7 @@ public class MainFunctions {
        
 protected static void indexDocs(final IndexWriter writer, Path path) throws IOException 
     {
-        //Directory?
+        //Is Directory?
         if (Files.isDirectory(path)) 
         {
             //Iterate directory
@@ -116,7 +120,7 @@ protected static void indexDocs(final IndexWriter writer, Path path) throws IOEx
          
         Directory dir = FSDirectory.open(Paths.get(INDEX_DIR));
          
-        //It is an interface for accessing a point-in-time view of a lucene index
+        // Interface for accessing a point-in-time view of a lucene index
         IndexReader reader = DirectoryReader.open(dir);
          
         //Index searcher
@@ -137,9 +141,9 @@ protected static TopDocs searchInContent(String textToFind, IndexSearcher search
 
         // deleteEntriesFromIndexUsingTerm() not fully functional.
         // Requires debugging and testing
-    	public static void deleteEntriesFromIndexUsingTerm() throws IOException, ParseException {
+public static void deleteEntriesFromIndexUsingTerm() throws IOException, ParseException {
 
-	    //System.out.println("Deleting documents with field '" + term.field() + "' with text '" + term.text() + "'");
+ //System.out.println("Deleting documents with field '" + term.field() + "' with text '" + term.text() + "'");
 	    System.out.println("Deleting index entries with defined term" );
                 
             Directory directory = FSDirectory.open( Paths.get(INDEX_DIR) );

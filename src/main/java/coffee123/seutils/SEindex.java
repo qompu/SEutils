@@ -1,7 +1,18 @@
 /*
- * Lucene index files im s directory. Updated for Lucene 8.8.1
- * Original source: Lucene - Index and Search Text Files - HowToDoInJava.com
+ * SEARCH ENGINE INDEXING 
+ * Lucene index class. Updated for Lucene 8.8.1
+ * Adapted from original source code: 
+ * Lucene - Index and Search Text Files - HowToDoInJava.com
  * https://howtodoinjava.com/lucene/lucene-index-and-search-text-files/
+ * Additional debugging and troubleshooting of the deleteEntriesFromIndexUsingTerm() 
+ * method using the Luke utility hosted by Google
+ * (https://code.google.com/archive/p/luke/) is required.
+ * Update: Apparently Luke has not been updated since 2012 and it's not compatible 
+ * with Lucene 8. ... Searching for other solutions...
+ *
+ * Lucene docs: https://lucene.apache.org/core/8_0_0/core/index.html?overview-summary.html
+ * "Apache Lucene is a high-performance, full-featured text search engine library."
+ * Lucene features  a nonSQL database which can be accessed and modified with java utilities.
  */
 package coffee123.seutils;
 
@@ -28,33 +39,37 @@ import org.apache.lucene.index.IndexWriter;
 import org.apache.lucene.index.IndexWriterConfig;
 import org.apache.lucene.index.IndexWriterConfig.OpenMode;
 import org.apache.lucene.index.Term;
+import org.apache.lucene.queryparser.classic.ParseException;
 import org.apache.lucene.queryparser.classic.QueryParser;
 import org.apache.lucene.search.IndexSearcher;
 import org.apache.lucene.search.Query;
+import org.apache.lucene.search.TermQuery;
 import org.apache.lucene.search.TopDocs;
 import org.apache.lucene.store.Directory;
 import org.apache.lucene.store.FSDirectory;
  
 public class SEindex {
-        //directory contains the lucene indexes
-    private static final String INDEX_DIR = "c:/temp/write2indexedFiles";
+    // Directory that contains the Lucene index
+    private static final String INDEX_DIR = "c:/temp/indexedFiles";
+    
+    // Directory that contains the text files to be indexed
+    private static final String DOC_DIR = "c:/temp/readFiles";
     
     public static void main(String[] args) throws IOException, Exception    {
         
         System.out.println( "Indexing files" ); 
-        //Input folder
-        String docsPath = "c:/temp/readFiles";
+
          
         //Output folder
-        String indexPath = "c:/temp/indexedFiles";
+       // String indexPath = "c:/temp/indexedFiles";
  
         //Input Path Variable
-        final Path docDir = Paths.get(docsPath);
+        final Path docDir = Paths.get(DOC_DIR);
  
         try
         {
             //org.apache.lucene.store.Directory instance
-            Directory dir = FSDirectory.open( Paths.get(indexPath) );
+            Directory dir = FSDirectory.open( Paths.get(INDEX_DIR) );
              
             //analyzer with the default stop words
             Analyzer analyzer = new StandardAnalyzer();
@@ -67,7 +82,7 @@ public class SEindex {
             IndexWriter writer = new IndexWriter(dir, iwc);
              
             //Its recursive method to iterate all files and directories
-            indexDocs(writer, docDir);
+            MainFunctions.indexDocs(writer, docDir);
  
             writer.close();
         } 
@@ -77,89 +92,18 @@ public class SEindex {
         }
         
         
-        
-                //Create lucene searcher. It search over a single IndexReader.
-        IndexSearcher searcher = createSearcher();
-       
-               //Search indexed contents using search term
-        TopDocs foundDocs = searchInContent("agreeable", searcher);
-         
+       //DELETE ENTRIES	
+	//	deleteEntriesFromIndexUsingTerm();
+
         
         
     }
-     
-    static void indexDocs(final IndexWriter writer, Path path) throws IOException 
-    {
-        //Directory?
-        if (Files.isDirectory(path)) 
-        {
-            //Iterate directory
-            Files.walkFileTree(path, new SimpleFileVisitor<Path>() 
-            {
-                @Override
-                public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) throws IOException 
-                {
-                    try
-                    {
-                        //Index this file
-                        indexDoc(writer, file, attrs.lastModifiedTime().toMillis());
-                    } 
-                    catch (IOException ioe) 
-                    {
-                        ioe.printStackTrace();
-                    }
-                    return FileVisitResult.CONTINUE;
-                }
-            });
-        } 
-        else
-        {
-            //Index this file
-            indexDoc(writer, path, Files.getLastModifiedTime(path).toMillis());
-        }
-    }
+    
+
+  
  
-    static void indexDoc(IndexWriter writer, Path file, long lastModified) throws IOException 
-    {
-        try (InputStream stream = Files.newInputStream(file)) 
-        {
-            //Create lucene Document
-            Document doc = new Document();
-             
-            doc.add(new StringField("path", file.toString(), Field.Store.YES));
-            doc.add(new LongPoint("modified", lastModified));
-            doc.add(new TextField("contents", new String(Files.readAllBytes(file)), Store.YES));
-             
-            //Updates a document by first deleting the document(s) 
-            //containing <code>term</code> and then adding the new
-            //document.  The delete and then add are atomic as seen
-            //by a reader on the same index
-            writer.updateDocument(new Term("path", file.toString()), doc);
-        }
-    }
-    
-    
-    //--------------------------------
-        private static IndexSearcher createSearcher() throws IOException  {
-        Directory dir = FSDirectory.open(Paths.get(INDEX_DIR));
-         
-        //It is an interface for accessing a point-in-time view of a lucene index
-        IndexReader reader = DirectoryReader.open(dir);
-         
-        //Index searcher
-        IndexSearcher searcher = new IndexSearcher(reader);
-        return searcher;
-    }
-        
-     private static TopDocs searchInContent(String textToFind, IndexSearcher searcher) throws Exception
-    {
-        //Create search query
-        QueryParser qp = new QueryParser("contents", new StandardAnalyzer());
-        Query query = qp.parse(textToFind);
-         
-        //search the index
-        TopDocs hits = searcher.search(query, 10);
-        return hits;
-    }
-    
 }
+
+
+
+

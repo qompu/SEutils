@@ -1,8 +1,20 @@
 /*
- * Lucene search file index. Updated for Lucene 8.8.1
- * Original source: Lucene - Index and Search Text Files - HowToDoInJava.com
+ * SEARCH ENGINE SEARCHING 
+ * Lucene search class. Updated for Lucene 8.8.1
+ * Adapted from original source code: 
+ * Lucene - Index and Search Text Files - HowToDoInJava.com
  * https://howtodoinjava.com/lucene/lucene-index-and-search-text-files/
+ * Additional debugging and troubleshooting of the deleteEntriesFromIndexUsingTerm() 
+ * method using the Luke utility hosted by Google
+ * (https://code.google.com/archive/p/luke/) is required.
+ * Update: Apparently Luke has not been updated since 2012 and it's not compatible 
+ * with Lucene 8. ... Searching for other solutions...
+ *
+ * Lucene docs: https://lucene.apache.org/core/8_0_0/core/index.html?overview-summary.html
+ * "Apache Lucene is a high-performance, full-featured text search engine library."
+ * Lucene features  a nonSQL database which can be accessed and modified with java utilities.
  */
+             
 package coffee123.seutils;
 
 import java.io.IOException;
@@ -39,50 +51,26 @@ import org.apache.lucene.store.FSDirectory;
  
 public class SEsearch {
     //directory contains the lucene indexes
-    private static final String INDEX_DIR = "c:/temp/indexedFiles";
+    protected static final String INDEX_DIR = "c:/temp/indexedFiles"; // Protected string can be accessed by other classes in package
     
     public static void main(String[] args) throws Exception 
     {
         //Create lucene searcher. It search over a single IndexReader.
-        IndexSearcher searcher = createSearcher();
+        IndexSearcher searcher = MainFunctions.createSearcher();
          
         //Search indexed contents using search term
-        //  TopDocs foundDocs = searchInContent("agreeable", searcher); // test
-        TopDocs foundDocs = searchInContent("lorem", searcher);  // test
+        TopDocs foundDocs = MainFunctions.searchInContent("lorem", searcher);  // test
            
         //Total found documents
         System.out.println("Total Results :: " + foundDocs.totalHits);
          
-        //Let's print out the path of files which have searched term
+        //prints out the path of files with the searched term
         for (ScoreDoc sd : foundDocs.scoreDocs) 
         {
             Document d = searcher.doc(sd.doc);
             System.out.println("Path : "+ d.get("path") + ", Score : " + sd.score);
         }
     }
-     
-    private static TopDocs searchInContent(String textToFind, IndexSearcher searcher) throws Exception
-    {
-        //Create search query
-        QueryParser qp = new QueryParser("contents", new StandardAnalyzer());
-        Query query = qp.parse(textToFind);
-         
-        //search the index
-        TopDocs hits = searcher.search(query, 10);
-        return hits;
-    }
- 
-    private static IndexSearcher createSearcher() throws IOException 
-    {
-        Directory dir = FSDirectory.open(Paths.get(INDEX_DIR));
-         
-        //It is an interface for accessing a point-in-time view of a lucene index
-        IndexReader reader = DirectoryReader.open(dir);
-         
-        //Index searcher
-        IndexSearcher searcher = new IndexSearcher(reader);
-        return searcher;
-    }
+
+    
 }
-
-
