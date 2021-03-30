@@ -6,6 +6,11 @@
  * Additional debugging and troubleshooting of the deleteEntriesFromIndexUsingTerm() 
  * method using the Luke utility hosted by Google
  * (https://code.google.com/archive/p/luke/) is required.
+ * Update: Apparently Luke has not been updated since 2012 and it's not compatible 
+ * with Lucene 8. ... Searching for other solutions...
+ *
+ * Lucene docs: https://lucene.apache.org/core/8_0_0/core/index.html?overview-summary.html
+ * "Apache Lucene is a high-performance, full-featured text search engine library."
  */
 
 
