@@ -37,24 +37,25 @@ import org.apache.lucene.store.FSDirectory;
  
 public class SEindex {
         //directory contains the lucene indexes
-    private static final String INDEX_DIR = "c:/temp/write2indexedFiles";
+    private static final String INDEX_DIR = "c:/temp/indexedFiles";
+    
+    private static final String DOC_DIR = "c:/temp/readFiles";
     
     public static void main(String[] args) throws IOException, Exception    {
         
         System.out.println( "Indexing files" ); 
-        //Input folder
-        String docsPath = "c:/temp/readFiles";
+
          
         //Output folder
-        String indexPath = "c:/temp/indexedFiles";
+       // String indexPath = "c:/temp/indexedFiles";
  
         //Input Path Variable
-        final Path docDir = Paths.get(docsPath);
+        final Path docDir = Paths.get(DOC_DIR);
  
         try
         {
             //org.apache.lucene.store.Directory instance
-            Directory dir = FSDirectory.open( Paths.get(indexPath) );
+            Directory dir = FSDirectory.open( Paths.get(INDEX_DIR) );
              
             //analyzer with the default stop words
             Analyzer analyzer = new StandardAnalyzer();
