@@ -9,7 +9,7 @@
  * Update: Luke is bundled with Lucene on version 8.8.1
  * and can be downloaded from https://lucene.apache.org/core/downloads.html
  * "Apache Lucene is a high-performance, full-featured text search engine library."
- * Lucene features  a nonSQL database which can be accessed and modified with Luke.
+ * Lucene features  a NoSQL database which can be accessed and modified with Luke.
  * The functions included in this java class include a delete document form from the index method
  * deleteEntriesFromIndexUsingQuery(). However, due to the limitations in Lucene, an add document 
  * to index method could not be created. Luke can be used to modifying the index.
@@ -75,10 +75,8 @@ public class MainFunctions {
             doc.add(new LongPoint("modified", lastModified));
             doc.add(new TextField("contents", new String(Files.readAllBytes(file)), Store.YES));
              
-            //Updates a document by first deleting the document(s) 
-            //containing <code>term</code> and then adding the new
-            //document.  The delete and then add are atomic as seen
-            //by a reader on the same index
+            //Updates a document - first deletes the document(s) 
+            //containing term and then adding the new document. 
             writer.updateDocument(new Term("path", file.toString()), doc);
         }
     }
