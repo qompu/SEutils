@@ -1,20 +1,21 @@
 /*
  * SEARCH ENGINE MAIN FUNCTIONS
+ * To be used as part of the main Search Engine project.
  * Lucene main search and index functions. Updated for Lucene 8.8.1
  * Adapted from original source code: 
  * Lucene - Index and Search Text Files - HowToDoInJava.com
  * https://howtodoinjava.com/lucene/lucene-index-and-search-text-files/
- * Additional debugging and troubleshooting of the deleteEntriesFromIndexUsingTerm() 
- * method using the Luke utility hosted by Google
- * (https://code.google.com/archive/p/luke/) is required.
- * Update: Apparently Luke has not been updated since 2012 and it's not compatible 
- * with Lucene 8. ... Searching for other solutions...
- *
- * Lucene docs: https://lucene.apache.org/core/8_0_0/core/index.html?overview-summary.html
+ * Modifying the index requires the Luke utility. 
+ * Update: Luke is bundled with Lucene on version 8.8.1
+ * and can be downloaded from https://lucene.apache.org/core/downloads.html
  * "Apache Lucene is a high-performance, full-featured text search engine library."
- * Lucene features  a nonSQL database which can be accessed and modified with java utilities.
+ * Lucene features  a nonSQL database which can be accessed and modified with Luke.
+ * The functions included in this java class include a delete document form from the index method
+ * deleteEntriesFromIndexUsingQuery(). However, due to the limitations in Lucene, an add document 
+ * to index method could not be created. Luke can be used to modifying the index.
+ * Reference: Tutorial On Using Lucene With Text search 
+ * (Brian Will) (21:00) https://www.youtube.com/watch?v=OHX24mNw2Jg
  */
-
 
 package coffee123.seutils;
 
