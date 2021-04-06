@@ -93,7 +93,7 @@ public class SEindex {
         
         
        //DELETE ENTRIES	
-	//	deleteEntriesFromIndexUsingTerm();
+		MainFunctions.deleteEntriesFromIndexUsingQuery();
 
         
         
