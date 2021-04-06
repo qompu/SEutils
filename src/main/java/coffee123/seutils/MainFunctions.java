@@ -76,7 +76,7 @@ public class MainFunctions {
             doc.add(new TextField("contents", new String(Files.readAllBytes(file)), Store.YES));
              
             //Updates a document - first deletes the document(s) 
-            //containing term and then adding the new document. 
+            //containing term and then adds the new document. 
             writer.updateDocument(new Term("path", file.toString()), doc);
         }
     }
