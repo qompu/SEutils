@@ -1,18 +1,15 @@
 /*
- * SEARCH ENGINE SEARCHING 
+ * SEARCH ENGINE TEXT SEARCHING 
+ * To be used as part of the main Search Engine project.
  * Lucene search class. Updated for Lucene 8.8.1
  * Adapted from original source code: 
  * Lucene - Index and Search Text Files - HowToDoInJava.com
  * https://howtodoinjava.com/lucene/lucene-index-and-search-text-files/
- * Additional debugging and troubleshooting of the deleteEntriesFromIndexUsingTerm() 
- * method using the Luke utility hosted by Google
- * (https://code.google.com/archive/p/luke/) is required.
- * Update: Apparently Luke has not been updated since 2012 and it's not compatible 
- * with Lucene 8. ... Searching for other solutions...
- *
- * Lucene docs: https://lucene.apache.org/core/8_0_0/core/index.html?overview-summary.html
+ * Modifying the index requires the Luke utility. 
+ * Update: Luke is bundled with Lucene on version 8.8.1
+ * and can be downloaded from https://lucene.apache.org/core/downloads.html
  * "Apache Lucene is a high-performance, full-featured text search engine library."
- * Lucene features  a nonSQL database which can be accessed and modified with java utilities.
+ * Lucene features  a nonSQL database which can be accessed and modified with Luke.
  */
              
 package coffee123.seutils;
@@ -58,11 +55,12 @@ public class SEsearch {
         //Create lucene searcher. It search over a single IndexReader.
         IndexSearcher searcher = MainFunctions.createSearcher();
          
+        String myString = "cottage";
         //Search indexed contents using search term
-        TopDocs foundDocs = MainFunctions.searchInContent("lorem", searcher);  // test
+        TopDocs foundDocs = MainFunctions.searchInContent(myString, searcher);  //  search for "cottage" should return file data1.txt and  data2.txt 
            
         //Total found documents
-        System.out.println("Total Results :: " + foundDocs.totalHits);
+        System.out.println("'" + myString + "' " + "Total Results :: " + foundDocs.totalHits);
          
         //prints out the path of files with the searched term
         for (ScoreDoc sd : foundDocs.scoreDocs) 
