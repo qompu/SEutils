@@ -141,7 +141,7 @@ protected static TopDocs searchInContent(String textToFind, IndexSearcher search
 
         // deleteEntriesFromIndexUsingTerm() not fully functional.
         // Requires debugging and testing
-public static void deleteEntriesFromIndexUsingTerm() throws IOException, ParseException {
+public static void deleteEntriesFromIndexUsingQuery() throws IOException, ParseException, Exception {
 
  //System.out.println("Deleting documents with field '" + term.field() + "' with text '" + term.text() + "'");
 	    System.out.println("Deleting index entries with defined term" );
@@ -155,18 +155,35 @@ public static void deleteEntriesFromIndexUsingTerm() throws IOException, ParseEx
             IndexWriterConfig iwc = new IndexWriterConfig(analyzer);
             iwc.setOpenMode(OpenMode.CREATE_OR_APPEND);
              
-            //IndexWriter writes new index files to the directory
+            // new IndexWriter object
             IndexWriter indexWriter = new IndexWriter(directory, iwc);
             
-            Term term = new Term("lorem", "ipsum");
-            Query query = new TermQuery(term);
+           //Create search query
+            String textToFind = "ipsum";
+            QueryParser qp = new QueryParser("contents", new StandardAnalyzer());
+            Query query = qp.parse(textToFind);
             
-            indexWriter.deleteDocuments(query);   // Requires debugging using Luke
-		
+            // DELETE DOCUMENT(S) FROM INDEX THAT CONTAIN QUERY
+            indexWriter.deleteDocuments(query);
+            indexWriter.commit();
             indexWriter.close();
-
+            
+            // VERIFY DOCUMENT(S) HAVE BEEN DELETED
+            //Create lucene searcher
+            IndexSearcher searcher = MainFunctions.createSearcher();
+         
+            //Search indexed contents using query
+            TopDocs foundDocs = MainFunctions.searchInContent("ipsum", searcher);  // test
+            //Total found documents
+            System.out.println("Total Results :: " + foundDocs.totalHits);
+         
+           //prints out the path of files with the searched term
+           for (ScoreDoc sd : foundDocs.scoreDocs) 
+           {
+               Document d = searcher.doc(sd.doc);
+               System.out.println("Path : "+ d.get("path") + ", Score : " + sd.score);
+           }
+  
 	}
 
-
- 
 }
