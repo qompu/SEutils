@@ -8,21 +8,22 @@ package coffee123.seutils;
 package com;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
-import org.hibernate.cfg.AnnotationConfiguration;
 public class HibernateFunction {
+    
+    //hibernate method to delete an index
+    //still a work in progress
    public static void delete(){
    try {
-	SessionFactory sessionfactory=new AnnotationConfiguration().configure().buildSessionFactory();
-	Session session=sessionfactory.openSession();
-	Employee obj_Employee=new Employee();
-	obj_Employee.setEmployee_name("Employee Two");
-	session.delete(obj_Employee);
-	System.out.println("Deleted  "+obj_Employee.getEmployee_name());
-	session.beginTransaction().commit(); 
-        session.close();
-        sessionfactory.close();
-    } catch (Exception e) {
-	System.out.println(e);
-     }
+         tx = session.beginTransaction();
+         Index index = (Index)session.get(SEindex.class,indexID); 
+         session.delete(index); 
+         tx.commit();
+      } catch (HibernateException e) {
+         if (tx!=null) tx.rollback();
+         e.printStackTrace(); 
+      } finally {
+         session.close(); 
+      }
+   }
     }
 }
